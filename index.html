@@ -49,6 +49,8 @@
                             <option value="5000" data-name="Vip Night Body Cream">Vip Night Body Cream</option>
                             <option value="2500" data-name="Night Serum (Alpha Arbutin)">Night Serum(Alpha Arbutin)</option>
                             <option value="1500" data-name="Night Toner (Alpha Arbutin Toner)">Night Toner (Alpha Arbutin Toner)</option>
+                            <option value="6000" data-name="Vip Night Big Face Cream">Vip Night Big Face Cream</option>
+                            <option value="8000" data-name="Vip Night Big Body Cream">Vip Night Big Body Cream</option>
                             <option value="1500" data-name="Day Face Cream">Day Face Cream</option>
                             <option value="3000" data-name="Day Body Cream">Day Body Cream</option>
                             <option value="2000" data-name="Day Serum (Niacinamide)">Day Serum (Niacinamide)</option>
@@ -119,7 +121,7 @@
             const price = parseInt(select.value);
             const name = select.options[select.selectedIndex].getAttribute('data-name');
             const qty = parseInt(document.getElementById('prodQty').value);
-            if (price === 0) return alert("භාණ්ඩයක් තෝරන්න!");
+            if (price === 0) return alert("Select Product!");
             const existing = cart.find(item => item.name === name);
             if (existing) { existing.qty += qty; } else { cart.push({ name, price, qty }); }
             renderCart();
@@ -177,6 +179,7 @@
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
 
+            
             // Remark එකක් තිබේ නම් පමණක් මැසේජ් එකට ඇතුළත් කරන කොටස:
             if(manualRemark) msg += `📝 *Remark:* ${manualRemark}\n\n`;
 
