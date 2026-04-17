@@ -192,6 +192,14 @@
             const rawText = document.getElementById('rawMessage').value;
             const btn = document.getElementById('btnText');
             if(!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
+
+            // 1. WhatsApp Timestamps ([16/03, 3:20 am]) ඉවත් කිරීම
+            rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
+
+            // 2. මැසේජ් එක උඩින් වැටෙන Header Phone Number එක (+94 77...: ) සම්පූර්ණයෙන්ම මකා දැමීම
+            // එවිට AI එකට Header එකේ අංකය පේන්නේ නැති නිසා ඒක Mobile Field එකට වැටෙන්නේ නැහැ.
+            rawText = rawText.replace(/(?:\+94|0)\s?\d{2,3}\s?\d{3}\s?\d{4}:/g, "");
+           
             btn.innerText = "Processing...";
             btn.disabled = true;
 
@@ -207,7 +215,11 @@
                         messages: [
                             {
                                 role: "system",
-                                content: "Extract info. For phone numbers, put the first one in 'phone' and others in 'phone2'. Return ONLY JSON: {name, address, phone, phone2, product}."
+                                content: `You are a data extractor. 
+                        - Ignore any leftover chat headers or timestamps.
+                        - Extract the customer's real phone number and address from the message body.
+                        - If a phone number is listed on its own line after the name, that is the customer's contact.
+                        - Return ONLY JSON: {name, address, phone, phone2, product}.`
                             },
                             { role: "user", content: rawText }
                         ],
