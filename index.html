@@ -178,10 +178,9 @@
             cart.forEach((item, index) => {
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
-
             
             // Remark එකක් තිබේ නම් පමණක් මැසේජ් එකට ඇතුළත් කරන කොටස:
-            if(manualRemark) msg += `📝 *Remark:* ${manualRemark}\n\n`;
+            if(manualRemark) msg += `📝 *Remark:* ${manualRemark}\n`;
 
             msg += `\n💰 *Total Amount:* Rs. ${total}\n`;
             msg += `--------------------------\n`;
