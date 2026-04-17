@@ -189,18 +189,12 @@
         }
 
         async function formatWithGroq() {
-    let rawText = document.getElementById('rawMessage').value;
-    const btn = document.getElementById('btnText');
-    if(!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
+            let rawText = document.getElementById('rawMessage').value;
+            const btn = document.getElementById('btnText');
+            if(!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
 
-    // --- පිරිසිදු කිරීමේ පියවර (Cleaning Steps) ---
-    
-    // 1. WhatsApp Timestamps ([16/03, 3:20 am]) ඉවත් කිරීම
-    rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
-
-    // 2. මැසේජ් එක උඩින් වැටෙන Header Phone Number එක (+94 77...: ) සම්පූර්ණයෙන්ම මකා දැමීම
-    // එවිට AI එකට Header එකේ අංකය පේන්නේ නැති නිසා ඒක Mobile Field එකට වැටෙන්නේ නැහැ.
-    rawText = rawText.replace(/(?:\+94|0)\s?\d{2,3}\s?\d{3}\s?\d{4}:/g, "");
+            rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
+            rawText = rawText.replace(/(?:\+94|0)\s?\d{2,3}\s?\d{3}\s?\d{4}:/g, "");
 
     btn.innerText = "Processing...";
     btn.disabled = true;
