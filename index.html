@@ -160,7 +160,7 @@
             const phone = document.getElementById('outPhone').value || "...";
             const phone2 = document.getElementById('outPhone2').value;
             const aiDetected = document.getElementById('outProduct').value;
-            const manualRemark = document.getElementById('manualRemark').value;
+            const remark = document.getElementById('remark').value;
             const total = document.getElementById('finalPrice').innerText;
 
             let msg = `*NEW ORDER CONFIRMATION*\n`;
@@ -179,9 +179,9 @@
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
             
-            if(manualRemark) msg += `📝 *Remark:* ${manualRemark}\n`;
+            if(remark) msg += `\n📝 *Remark:* ${remark}\n`;
 
-            msg += `\n💰 *Total Amount:* Rs. ${total}\n`;
+            msg += `💰 *Total Amount:* Rs. ${total}\n`;
             msg += `--------------------------\n`;
             msg += `_Thank you!_`;
 
