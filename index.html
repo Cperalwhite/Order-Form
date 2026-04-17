@@ -6,16 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Pro Business Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <style>
-        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #2563eb; }
-        input:checked + .slider:before { transform: translateX(22px); 
-        }  
-    </style>
 </head>
 <body class="bg-gray-100 p-2 md:p-5 font-sans">
 
@@ -46,28 +36,23 @@
                 </div>         
                    
                     <div class="flex gap-3items-end">
-                        <div class="w-1/2 space-y-1">
+                        <div class="w-2/2 space-y-1">
                         <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Remark / Order Type</label>
-                        <input type="text" id="remark" list="remarkOptions" oninput="updatePreview()" placeholder="Select or type remark..." class="w-full p-2 border-2 border-orange-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none font-semibold">
+                        <input type="text" id="remark" list="remarkOptions" oninput="updatePreview()" placeholder="Select or type remark..." class="w-full p-2 border-2 border-blue-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none font-semibold">
                         <datalist id="remarkOptions">
-                            <option value="Exchange">
-                            <option value="Damage">
-                            <option value="Missing">
-                            <option value="Without Delivery Charge">
-                            <option value="Deposit">
-                            <option value="Only Delivery Charge">
+                            <option value="Exchange"><option value="Damage"><option value="Missing"><option value="Without Delivery Charge"><option value="Deposit"><option value="Only Delivery Charge">
                         </datalist>
                 </div>
 
-                    <div class="bg-white border-2 border-blue-100 p-1.5 rounded-lg flex flex-col items-center justify-center min-w-[80px]">
-                        <label class="text-[9px] font-bold text-gray-500 uppercase mb-1">. Fee</label>
-                        <label class="switch">
-                            <input type="checkbox" id="delSwitch" checked onchange="handleDelSwitch()">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+                        <div class="w-1/2 space-y-1">
+                        <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Delivery Fee (Yes / No)</label>
+                        <select id="delOption" onchange="handleDelOption()" class="w-full p-2 border-2 border-blue-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none font-semibold">
+                            <option value="yes" selected>Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>                                         
                 </div>
-                    
+                   
                 <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
                     <label class="block text-sm font-bold text-blue-800 mb-2 uppercase">Add Items to Cart</label>
                     <div class="flex flex-wrap gap-2">
@@ -145,6 +130,15 @@
         let cart = [];
         const deliveryCharge = 425.00; 
 
+        function handleDelOption() {
+            const option = document.getElementById('delOption').value;
+    
+        // Yes නම් 425, No නම් 0
+            deliveryCharge = (option === "yes") ? 425.00 : 0.00;
+    
+            renderCart();   // Total එක update කිරීමට
+            updatePreview(); // WhatsApp Message එක update කිරීමට
+        }
         function addToCart() {
             const select = document.getElementById('productList');
             const price = parseFloat(select.value);
