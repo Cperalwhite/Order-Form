@@ -196,9 +196,9 @@
             });
 
             if (subtotal > 0) {
-                msg += `\n*Subtotal: Rs. ${subtotal}*\n`;
-                msg += `*Delivery Charge: Rs. ${deliveryCharge}*\n`;
-                msg += `\n*Total Amount: Rs. ${finalTotal}*\n`;
+                msg += `\n*Subtotal: Rs. ${subtotal.toFixed(2)}*\n`;
+                msg += `*Delivery Charge: Rs. ${deliveryCharge.toFixed(2)}*\n`;
+                msg += `\n*Total Amount: Rs. ${finalTotal.toFixed(2)}*\n`;
             }
             
             if(remark) msg += `\n*Remark:* ${remark}\n`;
