@@ -163,31 +163,32 @@
             const remark = document.getElementById('remark').value;
             const total = document.getElementById('finalPrice').innerText;
 
-            let msg = `*NEW ORDER CONFIRMATION*\n`;
+        let msg = `*NEW ORDER CONFIRMATION*\n`;
             msg += `--------------------------\n`;
             msg += `*Customer Name:* ${name}\n`;
             msg += `*Address:* ${address}\n`;
-            
-            let fullPhone = phone;
-            fullPhone += `\n📞 *Phone 2:* ${phone2}`;
-        }
-            msg += `*Phone:* ${fullPhone}\n\n`;
-            
-            if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
+    
+            msg += `*Phone 1:* ${phone}\n`;
+        if(phone2) {
+            msg += `*Phone 2:* ${phone2}\n`;
+    }
+            msg += `\n`; 
 
-            msg += `*Items List:*\n`;
-            cart.forEach((item, index) => {
-                msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
-            });
-            
-            if(remark) msg += `\n*Remark:* ${remark}\n`;
+        if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
 
-            msg += `\n*Total Amount:* Rs. ${total}\n`;
-            msg += `--------------------------\n`;
-            msg += `_Thank you!_`;
+    msg += `*Items List:*\n`;
+    cart.forEach((item, index) => {
+        msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
+    });
+    
+    if(remark) msg += `\n*Remark:* ${remark}\n`;
 
-            document.getElementById('waPreview').value = msg;
-        }
+    msg += `\n*Total Amount: Rs. ${total}*\n`;
+    msg += `--------------------------\n`;
+    msg += `_Thank you!_`;
+
+    document.getElementById('waPreview').value = msg;
+}
 
         async function formatWithGroq() {
     let rawText = document.getElementById('rawMessage').value;
