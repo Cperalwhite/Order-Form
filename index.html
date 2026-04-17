@@ -116,6 +116,8 @@
     <script>
         let cart = [];
 
+        const deliveryCharge = 425; // මෙතැනින් ඔබට අවශ්‍ය ගාස්තුව වෙනස් කළ හැක
+
         // 1. Cart එකට බඩු එකතු කිරීම
         function addToCart() {
             const select = document.getElementById('productList');
@@ -146,10 +148,10 @@
         function renderCart() {
             const tbody = document.getElementById('cartItems');
             tbody.innerHTML = '';
-            let total = 0;
+            let subtotal = 0;
             cart.forEach((item, index) => {
-                const subtotal = item.price * item.qty;
-                total += subtotal;
+                const itemtotal = item.price * item.qty;
+                subtotal += itemtotal;
                 tbody.innerHTML += `
                     <tr class="border-b">
                         <td class="py-2">${item.name}</td>
@@ -171,8 +173,14 @@
             const phone2 = document.getElementById('outPhone2').value;
             const aiDetected = document.getElementById('outProduct').value;
             const remark = document.getElementById('remark').value;
-            const total = document.getElementById('finalPrice').innerText;
 
+            let subtotal = 0;
+            cart.forEach(item => {
+                subtotal += (item.price * item.qty);
+            });
+
+            const finalTotal = subtotal > 0 ? (subtotal + deliveryCharge) : 0;
+            
             let msg = `*NEW ORDER CONFIRMATION*\n`;
             msg += `--------------------------\n`;
             msg += `*Customer Name:* ${name}\n`;
@@ -186,10 +194,16 @@
 
             if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
 
-            msg += `*Items List:*\n`;
+            msg += `\n*Items List:*\n`;
             cart.forEach((item, index) => {
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
+
+            if (subtotal > 0) {
+            msg += `\n*Subtotal: Rs. ${subtotal}*\n`;
+            msg += `*Delivery Charge: Rs. ${deliveryCharge}*\n`;
+            msg += `*Total Amount: Rs. ${finalTotal}*\n`;
+        }
             
             if(remark) msg += `\n*Remark:* ${remark}\n`;
 
