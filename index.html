@@ -115,11 +115,11 @@
 
     <script>
         let cart = [];
-        const deliveryCharge = 425; 
+        const deliveryCharge = 425.00; 
 
         function addToCart() {
             const select = document.getElementById('productList');
-            const price = parseInt(select.value);
+            const price = parseFloat(select.value);
             const name = select.options[select.selectedIndex].getAttribute('data-name');
             const qty = parseInt(document.getElementById('prodQty').value);
             
@@ -158,10 +158,9 @@
                         </td>
                     </tr>`;
             });
-            
-            // නිවැරදි කිරීම 1: total වෙනුවට නිවැරදි අගය පෙන්වීම
+                        
             const currentTotal = subtotal > 0 ? (subtotal + deliveryCharge) : 0;
-            document.getElementById('finalPrice').innerText = currentTotal;
+            document.getElementById('finalPrice').innerText = currentTotal.toFixed(2);
         }
 
         function updatePreview() {
@@ -193,7 +192,7 @@
 
             msg += `*Items List:*\n`;
             cart.forEach((item, index) => {
-                msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
+                msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${(item.price * item.qty).toFixed(2)}\n`;
             });
 
             if (subtotal > 0) {
