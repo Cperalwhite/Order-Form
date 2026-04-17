@@ -199,12 +199,11 @@
             if (subtotal > 0) {
                 msg += `\n*Subtotal: Rs. ${subtotal}*\n`;
                 msg += `*Delivery Charge: Rs. ${deliveryCharge}*\n`;
-                msg += `*Total Amount: Rs. ${finalTotal}*\n`;
+                msg += `\n*Total Amount: Rs. ${finalTotal}*\n`;
             }
             
             if(remark) msg += `\n*Remark:* ${remark}\n`;
 
-            // නිවැරදි කිරීම 2: මෙතැන තිබූ "total" ඉවත් කර finalTotal භාවිතා කළා
             msg += `--------------------------\n`;
             msg += `_Thank you!_`;
 
