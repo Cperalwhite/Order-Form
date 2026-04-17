@@ -115,10 +115,8 @@
 
     <script>
         let cart = [];
+        const deliveryCharge = 425; 
 
-        const deliveryCharge = 425; // මෙතැනින් ඔබට අවශ්‍ය ගාස්තුව වෙනස් කළ හැක
-
-        // 1. Cart එකට බඩු එකතු කිරීම
         function addToCart() {
             const select = document.getElementById('productList');
             const price = parseInt(select.value);
@@ -137,14 +135,12 @@
             updatePreview();
         }
 
-        // 2. Cart එකෙන් බඩු ඉවත් කිරීම
         function removeFromCart(index) {
             cart.splice(index, 1);
             renderCart();
             updatePreview();
         }
 
-        // 3. Cart එක Display කිරීම
         function renderCart() {
             const tbody = document.getElementById('cartItems');
             tbody.innerHTML = '';
@@ -156,16 +152,18 @@
                     <tr class="border-b">
                         <td class="py-2">${item.name}</td>
                         <td class="py-2 text-center font-bold">${item.qty}</td>
-                        <td class="py-2 text-right font-bold">${subtotal}</td>
+                        <td class="py-2 text-right font-bold">${itemtotal}</td>
                         <td class="py-2 text-center">
                             <button onclick="removeFromCart(${index})" class="text-red-500 font-bold">✕</button>
                         </td>
                     </tr>`;
             });
-            document.getElementById('finalPrice').innerText = total;
+            
+            // නිවැරදි කිරීම 1: total වෙනුවට නිවැරදි අගය පෙන්වීම
+            const currentTotal = subtotal > 0 ? (subtotal + deliveryCharge) : 0;
+            document.getElementById('finalPrice').innerText = currentTotal;
         }
 
-        // 4. WhatsApp Preview එක සෑදීම (Bold සහිත - Emoji රහිත)
         function updatePreview() {
             const name = document.getElementById('outName').value || "...";
             const address = document.getElementById('outAddress').value || "...";
@@ -185,7 +183,6 @@
             msg += `--------------------------\n`;
             msg += `*Customer Name:* ${name}\n`;
             msg += `*Address:* ${address}\n`;
-            
             msg += `*Phone 1:* ${phone}\n`;
             if(phone2) {
                 msg += `*Phone 2:* ${phone2}\n`;
@@ -194,27 +191,26 @@
 
             if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
 
-            msg += `\n*Items List:*\n`;
+            msg += `*Items List:*\n`;
             cart.forEach((item, index) => {
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
 
             if (subtotal > 0) {
-            msg += `\n*Subtotal: Rs. ${subtotal}*\n`;
-            msg += `*Delivery Charge: Rs. ${deliveryCharge}*\n`;
-            msg += `*Total Amount: Rs. ${finalTotal}*\n`;
-        }
+                msg += `\n*Subtotal: Rs. ${subtotal}*\n`;
+                msg += `*Delivery Charge: Rs. ${deliveryCharge}*\n`;
+                msg += `*Total Amount: Rs. ${finalTotal}*\n`;
+            }
             
             if(remark) msg += `\n*Remark:* ${remark}\n`;
 
-            msg += `\n*Total Amount: Rs. ${total}*\n`;
+            // නිවැරදි කිරීම 2: මෙතැන තිබූ "total" ඉවත් කර finalTotal භාවිතා කළා
             msg += `--------------------------\n`;
             msg += `_Thank you!_`;
 
             document.getElementById('waPreview').value = msg;
         }
 
-        // 5. Groq AI එක හරහා දත්ත Extract කිරීම
         async function formatWithGroq() {
             let rawText = document.getElementById('rawMessage').value;
             const btn = document.getElementById('btnText');
@@ -250,7 +246,6 @@
                 const data = await response.json();
                 const result = JSON.parse(data.choices[0].message.content);
 
-                // Input fields වලට දත්ත දැමීම
                 document.getElementById('outName').value = result.name || "";
                 document.getElementById('outAddress').value = result.address || "";
                 document.getElementById('outPhone').value = result.phone || "";
@@ -261,20 +256,18 @@
 
             } catch (error) {
                 console.error(error);
-                alert("AI Error! API Key එක හෝ Connection පරීක්ෂා කරන්න.");
+                alert("Error! Check API Key or Connection.");
             } finally {
                 btn.innerText = "Format Customer Info ✨";
                 btn.disabled = false;
             }
         }
 
-        // 6. WhatsApp Share කිරීම
         function shareToWhatsApp() {
             const message = document.getElementById('waPreview').value;
             window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
         }
 
-        // 7. Save කිරීම
         function saveOrder() {
             alert("Order Details Saved Locally!");
         }
