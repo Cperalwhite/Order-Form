@@ -165,23 +165,24 @@
 
             let msg = `*NEW ORDER CONFIRMATION*\n`;
             msg += `--------------------------\n`;
-            msg += `👤 *Customer:* ${name}\n`;
-            msg += `📍 *Address:* ${address}\n`;
+            msg += `*Customer Name:* ${name}\n`;
+            msg += `*Address:* ${address}\n`;
             
             let fullPhone = phone;
-            if(phone2) fullPhone += ` / ${phone2}`;
-            msg += `📞 *Phone:* ${fullPhone}\n\n`;
+            fullPhone += `\n📞 *Phone 2:* ${phone2}`;
+        }
+            msg += `*Phone:* ${fullPhone}\n\n`;
             
-            if(aiDetected) msg += `📝 *Order Note:* ${aiDetected}\n\n`;
+            if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
 
-            msg += `📦 *Items List:*\n`;
+            msg += `*Items List:*\n`;
             cart.forEach((item, index) => {
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
             
-            if(remark) msg += `\n📝 *Remark:* ${remark}\n`;
+            if(remark) msg += `\n*Remark:* ${remark}\n`;
 
-            msg += `\n💰 *Total Amount:* Rs. ${total}\n`;
+            msg += `\n*Total Amount:* Rs. ${total}\n`;
             msg += `--------------------------\n`;
             msg += `_Thank you!_`;
 
