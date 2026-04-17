@@ -193,6 +193,18 @@
     const btn = document.getElementById('btnText');
     if (!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
 
+    // --- පිරිසිදු කිරීමේ පියවර (Cleaning Steps) ---
+
+    // 1. [16/03, 3:20 am] වැනි වරහන් ඇතුළේ ඇති Timestamp එක ඉවත් කරන්න
+    let cleanedText = rawText.replace(/\[.*?\]/g, "");
+
+    // 2. පේළියේ මුල සිට තිත් දෙක (:) දක්වා ඇති සියල්ල ඉවත් කරන්න 
+    // (එනම් දුරකථන අංකය සහ අනවශ්‍ය දේවල් මැකී නම පමණක් ඉතිරි වේ)
+    cleanedText = cleanedText.replace(/^.*?:/gm, "");
+
+    // 3. හිස් පේළි සහ දෙපස ඇති අනවශ්‍ය Space ඉවත් කරන්න
+    cleanedText = cleanedText.trim();
+
     btn.innerText = "Processing...";
     btn.disabled = true;
 
@@ -208,25 +220,13 @@
                 messages: [
                     {
                         role: "system",
-                        content: `You are a strict data extractor for a Sri Lankan e-commerce business.
-                        
-                        CRITICAL INSTRUCTIONS:
-                        1. The input contains WhatsApp headers like "[16/03, 3:20 am] +94 77 840 7891:". 
-                        2. You MUST IGNORE everything inside brackets [] and everything before the colon (:).
-                        3. DO NOT use the phone number from the header as the customer's mobile number.
-                        4. ONLY extract the Name, Address, and Phone number written by the customer in the message body.
-                        5. If the header says "+94 77 840 7891: MIHIRI", 'MIHIRI' is the name, but '+94 77...' is NOT the customer's phone unless it's repeated below.
-                        
-                        Return ONLY JSON: {"name": "", "address": "", "phone": "", "phone2": "", "product": ""}`
+                        content: "Extract customer Name, Address, and Phone from the message. Return ONLY JSON: {name, address, phone, phone2, product}."
                     },
-                    { role: "user", content: rawText }
+                    { role: "user", content: cleanedText } // පිරිසිදු කළ Text එක මෙතනට යයි
                 ],
                 response_format: { type: "json_object" }
             })
         });
-
-        const data = await response.json();
-        const result = JSON.parse(data.choices[0].message.content);
 
         // UI එකට දත්ත දැමීම
         document.getElementById('outName').value = result.name || "";
