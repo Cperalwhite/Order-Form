@@ -191,8 +191,9 @@
         async function formatWithGroq() {
             let rawText = document.getElementById('rawMessage').value;
             const btn = document.getElementById('btnText');
-            if(!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
+            if (!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
 
+    // 1. පිරිසිදු කිරීමේ පියවර (Cleaning)
             rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
             rawText = rawText.replace(/(?:\+94|0)\s?\d{2,3}\s?\d{3}\s?\d{4}:/g, "");
 
@@ -204,7 +205,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer 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' 
+                'Authorization': 'Bearer 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'
             },
             body: JSON.stringify({
                 model: "llama-3.3-70b-versatile",
@@ -214,7 +215,6 @@
                         content: `You are a data extractor. 
                         - Ignore any leftover chat headers or timestamps.
                         - Extract the customer's real phone number and address from the message body.
-                        - If a phone number is listed on its own line after the name, that is the customer's contact.
                         - Return ONLY JSON: {name, address, phone, phone2, product}.`
                     },
                     { role: "user", content: rawText }
@@ -224,22 +224,32 @@
         });
 
         const data = await response.json();
+        
+        // Error එකක් ආවොත් පරීක්ෂා කිරීම
+        if (!data.choices || data.choices.length === 0) {
+            throw new Error("Invalid response from AI");
+        }
+
         const result = JSON.parse(data.choices[0].message.content);
 
-        // UI එකට දත්ත යැවීම
+        // 2. UI එකට දත්ත ඇතුළත් කිරීම (මෙහි තමයි කලින් වැරැද්ද තිබුණේ)
         document.getElementById('outName').value = result.name || "";
         document.getElementById('outAddress').value = result.address || "";
         document.getElementById('outPhone').value = result.phone || "";
         document.getElementById('outPhone2').value = result.phone2 || "";
         document.getElementById('outProduct').value = result.product || "";
-        
-        updatePreview();
-    } catch (error) { 
-        console.error(error);
-        alert("AI එකට සම්බන්ධ වීමේ ගැටලුවක්! නැවත උත්සාහ කරන්න."); 
-    } finally { 
-        btn.innerText = "Format Customer Info ✨"; 
-        btn.disabled = false; 
+
+        // Preview එක Update කිරීම
+        if (typeof updatePreview === "function") {
+            updatePreview();
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("AI එකට සම්බන්ධ වීමේ ගැටලුවක්! නැවත උත්සාහ කරන්න.");
+    } finally {
+        btn.innerText = "Format Customer Info ✨";
+        btn.disabled = false;
     }
 }        
                 updatePreview();
