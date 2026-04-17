@@ -193,10 +193,14 @@
             const btn = document.getElementById('btnText');
             if (!rawText) return alert("මැසේජ් එක ඇතුළත් කරන්න!");
 
-            // WhatsApp Headers පිරිසිදු කිරීම
-            rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
-            rawText = rawText.replace(/(?:\+94|0)\s?\d{2,3}\s?\d{3}\s?\d{4}:/g, "");
+            let lines = rawText.split('\n');
 
+            if (lines[0].includes(':')) {
+            lines.shift(); // පළමු පේළිය සම්පූර්ණයෙන්ම අයින් කරනවා
+    }
+            rawText = lines.join('\n').trim();
+            rawText = rawText.replace(/\[\d{2}\/\d{2}, \d{1,2}:\d{2}\s?[ap]m\]/gi, "");
+            
             btn.innerText = "Processing...";
             btn.disabled = true;
 
