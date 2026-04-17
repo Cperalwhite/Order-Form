@@ -2,6 +2,7 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; connect-src 'self' https://api.groq.com; img-src 'self' data:;">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Pro Business Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -10,7 +11,7 @@
 
     <div class="max-w-6xl mx-auto bg-white p-4 md:p-8 rounded-2xl shadow-2xl border border-gray-200">
         <h2 class="text-2xl md:text-3xl font-extrabold mb-6 text-blue-800 border-b pb-4 flex items-center gap-2">
-            Smart Business Operations Center
+            📊 Smart Business Operations Center
         </h2>
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -101,7 +102,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <button onclick="saveOrder()" class="bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-black transition-all shadow-md">
-                            Save Order
+                            💾 Save Order
                         </button>
                         <button onclick="shareToWhatsApp()" class="bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all shadow-md">
                             WhatsApp Send 🚀
@@ -115,24 +116,33 @@
     <script>
         let cart = [];
 
+        // 1. Cart එකට බඩු එකතු කිරීම
         function addToCart() {
             const select = document.getElementById('productList');
             const price = parseInt(select.value);
             const name = select.options[select.selectedIndex].getAttribute('data-name');
             const qty = parseInt(document.getElementById('prodQty').value);
+            
             if (price === 0) return alert("Select Product!");
+            
             const existing = cart.find(item => item.name === name);
-            if (existing) { existing.qty += qty; } else { cart.push({ name, price, qty }); }
+            if (existing) { 
+                existing.qty += qty; 
+            } else { 
+                cart.push({ name, price, qty }); 
+            }
             renderCart();
             updatePreview();
         }
 
+        // 2. Cart එකෙන් බඩු ඉවත් කිරීම
         function removeFromCart(index) {
             cart.splice(index, 1);
             renderCart();
             updatePreview();
         }
 
+        // 3. Cart එක Display කිරීම
         function renderCart() {
             const tbody = document.getElementById('cartItems');
             tbody.innerHTML = '';
@@ -153,6 +163,7 @@
             document.getElementById('finalPrice').innerText = total;
         }
 
+        // 4. WhatsApp Preview එක සෑදීම (Bold සහිත - Emoji රහිත)
         function updatePreview() {
             const name = document.getElementById('outName').value || "...";
             const address = document.getElementById('outAddress').value || "...";
@@ -189,6 +200,7 @@
             document.getElementById('waPreview').value = msg;
         }
 
+        // 5. Groq AI එක හරහා දත්ත Extract කිරීම
         async function formatWithGroq() {
             let rawText = document.getElementById('rawMessage').value;
             const btn = document.getElementById('btnText');
@@ -224,6 +236,7 @@
                 const data = await response.json();
                 const result = JSON.parse(data.choices[0].message.content);
 
+                // Input fields වලට දත්ත දැමීම
                 document.getElementById('outName').value = result.name || "";
                 document.getElementById('outAddress').value = result.address || "";
                 document.getElementById('outPhone').value = result.phone || "";
@@ -234,18 +247,20 @@
 
             } catch (error) {
                 console.error(error);
-                alert("AI Error! Please check your connection or API key.");
+                alert("AI Error! API Key එක හෝ Connection පරීක්ෂා කරන්න.");
             } finally {
                 btn.innerText = "Format Customer Info ✨";
                 btn.disabled = false;
             }
         }
 
+        // 6. WhatsApp Share කිරීම
         function shareToWhatsApp() {
             const message = document.getElementById('waPreview').value;
             window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
         }
 
+        // 7. Save කිරීම
         function saveOrder() {
             alert("Order Details Saved Locally!");
         }
