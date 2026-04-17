@@ -33,8 +33,8 @@
                     <textarea id="outAddress" rows="2" oninput="updatePreview()" placeholder="Delivery Address" class="w-full p-2 border rounded-lg bg-white"></textarea>
 
             <div class="space-y-1 mt-2">
-                <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Manual Remark / Special Note</label>
-                <input type="text" id="manualRemark" oninput="updatePreview()" placeholder="විශේෂ සටහන් (උදා: හවස 5න් පසු ගේන්න)..." class="w-full p-2 border-2 border-orange-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none">
+                <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Remark</label>
+                <input type="text" id="Remark" oninput="updatePreview()" placeholder="Note..." class="w-full p-2 border-2 border-orange-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none">
                 </div>
                     
                     <input type="text" id="outProduct" oninput="updatePreview()" placeholder="Product (from message)" class="w-full p-2 border-2 border-blue-200 rounded-lg bg-white italic text-sm">
@@ -179,7 +179,6 @@
                 msg += `${index + 1}. ${item.name} (x${item.qty}) - Rs.${item.price * item.qty}\n`;
             });
             
-            // Remark එකක් තිබේ නම් පමණක් මැසේජ් එකට ඇතුළත් කරන කොටස:
             if(manualRemark) msg += `📝 *Remark:* ${manualRemark}\n`;
 
             msg += `\n💰 *Total Amount:* Rs. ${total}\n`;
