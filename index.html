@@ -121,7 +121,7 @@
             const select = document.getElementById('productList');
             const price = parseFloat(select.value);
             const name = select.options[select.selectedIndex].getAttribute('data-name');
-            const qty = parseInt(document.getElementById('prodQty').value);
+            const qty = parseFloat(document.getElementById('prodQty').value);
             
             if (price === 0) return alert("Select Product!");
             
@@ -152,7 +152,7 @@
                     <tr class="border-b">
                         <td class="py-2">${item.name}</td>
                         <td class="py-2 text-center font-bold">${item.qty}</td>
-                        <td class="py-2 text-right font-bold">${itemtotal}</td>
+                        <td class="py-2 text-right font-bold">${itemtotal.toFixed(2)}</td>
                         <td class="py-2 text-center">
                             <button onclick="removeFromCart(${index})" class="text-red-500 font-bold">✕</button>
                         </td>
