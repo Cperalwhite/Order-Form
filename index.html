@@ -57,6 +57,7 @@
                     <label class="block text-sm font-bold text-blue-800 mb-2 uppercase">Add Items to Cart</label>
                     <div class="flex flex-wrap gap-2">
                         <select id="productList" class="flex-1 p-2 border rounded-lg bg-white font-semibold">
+                            <input type="number" id="customPrice" placeholder="Price" class="w-24 p-2 border rounded-lg text-center font-bold bg-yellow-50">
                             <option value="0" data-name="">-- Select Product --</option>
                             <option value="3000" data-name="VIP Night Face Cream">VIP Night Face Cream</option>
                             <option value="5000" data-name="Vip Night Body Cream">Vip Night Body Cream</option>
@@ -141,11 +142,11 @@
         }
         function addToCart() {
             const select = document.getElementById('productList');
-            const price = parseFloat(select.value);
             const name = select.options[select.selectedIndex].getAttribute('data-name');
+            const price = parseFloat(document.getElementById('customPrice').value);
             const qty = parseFloat(document.getElementById('prodQty').value);
             
-            if (price === 0) return alert("Select Product!");
+            if (isNaN(price)) return alert("0");
             
             const existing = cart.find(item => item.name === name);
             if (existing) { 
@@ -156,6 +157,10 @@
             renderCart();
             updatePreview();
         }
+
+        document.getElementById('productList').onchange = function() {
+    document.getElementById('customPrice').value = this.value;
+    };
 
         function removeFromCart(index) {
             cart.splice(index, 1);
