@@ -34,55 +34,73 @@
                 
                     <input type="text" id="outProduct" oninput="updatePreview()" placeholder="Product (from message)" class="w-full p-2 border-2 border-blue-200 rounded-lg bg-white italic text-sm">
                 </div>         
-                   
-                    <div class="flex gap-3items-end">
-                        <div class="w-2/2 space-y-1">
+                    
+                <div class="flex gap-3 items-end">
+                    <div class="w-2/3 space-y-1">
                         <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Remark / Order Type</label>
                         <input type="text" id="remark" list="remarkOptions" oninput="updatePreview()" placeholder="Select or type remark..." class="w-full p-2 border-2 border-blue-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none font-semibold">
                         <datalist id="remarkOptions">
                             <option value="Exchange"><option value="Damage"><option value="Missing"><option value="Without Delivery Charge"><option value="Deposit"><option value="Only Delivery Charge">
                         </datalist>
-                </div>
+                    </div>
 
-                        <div class="w-1/2 space-y-1">
-                        <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Delivery Fee (Yes / No)</label>
+                    <div class="w-1/3 space-y-1">
+                        <label class="text-[10px] font-bold text-blue-600 uppercase ml-1">Delivery Fee</label>
                         <select id="delOption" onchange="handleDelOption()" class="w-full p-2 border-2 border-blue-200 rounded-lg bg-orange-50 text-sm focus:border-orange-400 outline-none font-semibold">
                             <option value="yes" selected>Yes</option>
                             <option value="no">No</option>
                         </select>
                     </div>                                         
                 </div>
-                   
+
+                <div class="bg-green-50 p-3 rounded-xl border border-green-200 flex items-center justify-between">
+                    <label class="text-xs font-bold text-green-800 uppercase">Special Discount (Rs.)</label>
+                    <select id="discountRate" onchange="renderCart(); updatePreview();" class="p-2 border-2 border-green-300 rounded-lg font-bold bg-white outline-none text-sm">
+                        <option value="0">No Discount</option>
+                        <option value="50">Rs. 50</option>
+                        <option value="100">Rs. 100</option>
+                        <option value="200">Rs. 200</option>
+                        <option value="300">Rs. 300</option>
+                        <option value="500">Rs. 500</option>
+                    </select>
+                </div>
+                    
                 <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                    <label class="block text-sm font-bold text-blue-800 mb-2 uppercase">Add Items to Cart</label>
-                    <div class="flex flex-wrap gap-2">
-                        <select id="productList" class="flex-1 p-2 border rounded-lg bg-white font-semibold">
-                            <input type="number" id="customPrice" placeholder="Price" class="w-24 p-2 border rounded-lg text-center font-bold bg-yellow-50">
-                            <option value="0" data-name="">-- Select Product --</option>
-                            <option value="3000" data-name="VIP Night Face Cream">VIP Night Face Cream</option>
-                            <option value="5000" data-name="Vip Night Body Cream">Vip Night Body Cream</option>
-                            <option value="2500" data-name="Night Serum (Alpha Arbutin)">Night Serum(Alpha Arbutin)</option>
-                            <option value="1500" data-name="Night Toner (Alpha Arbutin Toner)">Night Toner (Alpha Arbutin Toner)</option>
-                            <option value="6000" data-name="Vip Night Big Face Cream">Vip Night Big Face Cream</option>
-                            <option value="8000" data-name="Vip Night Big Body Cream">Vip Night Big Body Cream</option>
-                            <option value="1500" data-name="Day Face Cream">Day Face Cream</option>
-                            <option value="3000" data-name="Day Body Cream">Day Body Cream</option>
-                            <option value="2000" data-name="Day Serum (Niacinamide)">Day Serum (Niacinamide)</option>
-                            <option value="1000" data-name="Day Toner (Niacinamide)">Day Toner (Niacinamide)</option>
-                            <option value="1500" data-name="Lip Blam">Lip Blam</option>
-                            <option value="1000" data-name="Lip Scrub">Lip Scrub </option>
-                            <option value="800" data-name="Charcoal Soap">Charcoal Soap</option>
-                            <option value="1000" data-name="Milky & Honey Soap">Milky & Honey Soap</option>
-                            <option value="1000" data-name="Charcoal Face Wash">Charcoal Face Wash</option>
-                            <option value="1700" data-name="Hair Oil">Hair Oil</option>
-                            <option value="1700" data-name="Hair Toner">HairToner</option>
-                            <option value="4800" data-name="Lady White">Lady White</option>
-                            <option value="4900" data-name="Pinky Plus">Pinky Plus</option>
-                            <option value="3900" data-name="Apple Cider">Apple Cider</option>
-                            <option value="5400" data-name="Berry Fiber">Berry Fiber</option>
-                        </select>
-                        <input type="number" id="prodQty" value="1" min="1" class="w-16 p-2 border rounded-lg text-center font-bold">
-                        <button onclick="addToCart()" class="bg-blue-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-900 shadow-md">Add</button>
+                    <label class="block text-sm font-bold text-blue-800 mb-2 uppercase">Add Items (Search & Select)</label>
+                    <div class="flex flex-wrap gap-2 items-end">
+                        <div class="flex-1 min-w-[150px]">
+                            <input type="text" id="productSearch" list="productOptions" 
+                                   onfocus="this.value=''" 
+                                   onchange="syncPriceFromSearch()" 
+                                   placeholder="Click to select or type..." 
+                                   class="w-full p-2 border-2 border-blue-300 rounded-lg bg-white font-semibold outline-none focus:border-blue-500 text-sm">
+                            <datalist id="productOptions">
+                                <option value="VIP Night Face Cream" data-price="3000">
+                                <option value="Vip Night Body Cream" data-price="5000">
+                                <option value="Night Serum (Alpha Arbutin)" data-price="2500">
+                                <option value="Night Toner (Alpha Arbutin Toner)" data-price="1500">
+                                <option value="Vip Night Big Face Cream" data-price="6000">
+                                <option value="Vip Night Big Body Cream" data-price="8000">
+                                <option value="Day Face Cream" data-price="1500">
+                                <option value="Day Body Cream" data-price="3000">
+                                <option value="Day Serum (Niacinamide)" data-price="2000">
+                                <option value="Day Toner (Niacinamide)" data-price="1000">
+                                <option value="Lip Blam" data-price="1500">
+                                <option value="Lip Scrub" data-price="1000">
+                                <option value="Charcoal Soap" data-price="800">
+                                <option value="Milky & Honey Soap" data-price="1000">
+                                <option value="Charcoal Face Wash" data-price="1000">
+                                <option value="Hair Oil" data-price="1700">
+                                <option value="Hair Toner" data-price="1700">
+                                <option value="Lady White" data-price="4800">
+                                <option value="Pinky Plus" data-price="4900">
+                                <option value="Apple Cider" data-price="3900">
+                                <option value="Berry Fiber" data-price="5400">
+                            </datalist>
+                        </div>
+                        <input type="number" id="customPrice" placeholder="Price" class="w-20 p-2 border-2 border-blue-300 rounded-lg text-center font-bold bg-yellow-50 outline-none text-sm">
+                        <input type="number" id="prodQty" value="1" min="1" class="w-14 p-2 border-2 border-blue-300 rounded-lg text-center font-bold outline-none text-sm">
+                        <button onclick="addToCartFromSearch()" class="bg-blue-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-900 shadow-md text-sm">Add</button>
                     </div>
                 </div>
             </div>
@@ -133,34 +151,43 @@
 
         function handleDelOption() {
             const option = document.getElementById('delOption').value;
-    
-        // Yes නම් 425, No නම් 0
             deliveryCharge = (option === "yes") ? 425.00 : 0.00;
-    
-            renderCart();   // Total එක update කිරීමට
-            updatePreview(); // WhatsApp Message එක update කිරීමට
+            renderCart();
+            updatePreview();
         }
-        function addToCart() {
-            const select = document.getElementById('productList');
-            const name = select.options[select.selectedIndex].getAttribute('data-name');
+
+        function syncPriceFromSearch() {
+            const val = document.getElementById('productSearch').value;
+            const opts = document.getElementById('productOptions').options;
+            for (let i = 0; i < opts.length; i++) {
+                if (opts[i].value === val) {
+                    document.getElementById('customPrice').value = opts[i].getAttribute('data-price');
+                    break;
+                }
+            }
+        }
+
+        function addToCartFromSearch() {
+            const name = document.getElementById('productSearch').value;
             const price = parseFloat(document.getElementById('customPrice').value);
             const qty = parseFloat(document.getElementById('prodQty').value);
             
-            if (isNaN(price)) return alert("0");
+            if (!name || isNaN(price)) return alert("Select product and enter price!");
             
-            const existing = cart.find(item => item.name === name);
+            const existing = cart.find(item => item.name === name && item.price === price);
             if (existing) { 
                 existing.qty += qty; 
             } else { 
                 cart.push({ name, price, qty }); 
             }
+            
+            document.getElementById('productSearch').value = '';
+            document.getElementById('customPrice').value = '';
+            document.getElementById('prodQty').value = '1';
+            
             renderCart();
             updatePreview();
         }
-
-        document.getElementById('productList').onchange = function() {
-    document.getElementById('customPrice').value = this.value;
-    };
 
         function removeFromCart(index) {
             cart.splice(index, 1);
@@ -180,13 +207,12 @@
                         <td class="py-2">${item.name}</td>
                         <td class="py-2 text-center font-bold">${item.qty}</td>
                         <td class="py-2 text-right font-bold">${itemtotal.toFixed(2)}</td>
-                        <td class="py-2 text-center">
-                            <button onclick="removeFromCart(${index})" class="text-red-500 font-bold">✕</button>
-                        </td>
+                        <td class="py-2 text-center"><button onclick="removeFromCart(${index})" class="text-red-500 font-bold">✕</button></td>
                     </tr>`;
             });
-                        
-            const currentTotal = subtotal > 0 ? (subtotal + deliveryCharge) : 0;
+            
+            const discount = parseFloat(document.getElementById('discountRate').value) || 0;
+            const currentTotal = subtotal > 0 ? (subtotal + deliveryCharge - discount) : 0;
             document.getElementById('finalPrice').innerText = currentTotal.toFixed(2);
         }
 
@@ -197,22 +223,18 @@
             const phone2 = document.getElementById('outPhone2').value;
             const aiDetected = document.getElementById('outProduct').value;
             const remark = document.getElementById('remark').value;
+            const discount = parseFloat(document.getElementById('discountRate').value) || 0;
 
             let subtotal = 0;
-            cart.forEach(item => {
-                subtotal += (item.price * item.qty);
-            });
-
-            const finalTotal = subtotal > 0 ? (subtotal + deliveryCharge) : 0;
+            cart.forEach(item => subtotal += (item.price * item.qty));
+            const finalTotal = subtotal > 0 ? (subtotal + deliveryCharge - discount) : 0;
             
             let msg = `*NEW ORDER CONFIRMATION*\n`;
             msg += `--------------------------\n`;
             msg += `*Customer Name:* ${name}\n`;
             msg += `*Address:* ${address}\n`;
             msg += `*Phone 1:* ${phone}\n`;
-            if(phone2) {
-                msg += `*Phone 2:* ${phone2}\n`;
-            }
+            if(phone2) msg += `*Phone 2:* ${phone2}\n`;
             msg += `\n`; 
 
             if(aiDetected) msg += `*Order Note:* ${aiDetected}\n\n`;
@@ -225,11 +247,11 @@
             if (subtotal > 0) {
                 msg += `\n*Subtotal: Rs. ${subtotal.toFixed(2)}*\n`;
                 msg += `*Delivery Charge: Rs. ${deliveryCharge.toFixed(2)}*\n`;
+                if(discount > 0) msg += `*Discount: - Rs. ${discount.toFixed(2)}*\n`;
                 msg += `\n*Total Amount: Rs. ${finalTotal.toFixed(2)}*\n`;
             }
             
             if(remark) msg += `\n*Remark:* ${remark}\n`;
-
             msg += `--------------------------\n`;
             msg += `_Thank you!_`;
 
